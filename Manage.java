@@ -1,7 +1,7 @@
 /*
  * Class for adding, modifying, and completing tickets.
  * 
- * ToDo: add option for admins to delete ticktes
+ * ToDo: add option for admins to delete tickets
  */
 
 import java.time.LocalDate;
@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.Types;
 
 public class Manage {
+	// Method to add a new ticket to a database
 	public boolean addTicket(String desc, char[] roomNum, char[] reporter,  int techID) {
 		// variable declaration
 		LocalDate ldate; // today's date
@@ -58,7 +59,7 @@ public class Manage {
 		return true; // we're going to assume that if no exception was thrown that everything is kosher
 	}
 
-
+	// Method to modify the description of a ticket.
 	public boolean modTicket(int TicketID, String desc) { 
 		// variable declaration
 		LocalDate ldate; // today's date
@@ -73,6 +74,7 @@ public class Manage {
 		try {
 			pstmt = ConnectHandler.connection.prepareStatement(query);
 			pstmt.setInt(1, TicketID);
+			
 			rs = pstmt.executeQuery();
 		}
 		catch (SQLException e) {
@@ -91,6 +93,8 @@ public class Manage {
 			pstmt = ConnectHandler.connection.prepareStatement(query);
 			pstmt.setString(1,  descString);
 			pstmt.setInt(2, TicketID);
+			
+			pstmt.executeQuery();
 		}
 		catch (SQLException e) {
 			System.out.println("Exception occured");
