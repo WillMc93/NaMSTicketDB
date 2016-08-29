@@ -4,17 +4,18 @@
  * ToDo: add option for admins to delete tickets
  */
 
-import java.time.LocalDate;
-
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Date;
 import java.sql.Types;
+
+import java.time.LocalDate;
+
 
 public class Manage {
 	// Method to add a new ticket to a database
-	public boolean addTicket(String desc, char[] roomNum, char[] reporter,  int techID) {
+	public boolean addTicket(String desc, char[] roomNum, char[] reporter) {
 		// variable declaration
 		LocalDate ldate; // today's date
 		String query; // query container
@@ -47,7 +48,7 @@ public class Manage {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketNum);
 			pstmt.setDate(2, Date.valueOf(ldate));
-			pstmt.setInt(3, techID);
+			pstmt.setInt(3, Technicians.getTechID());
 
 			pstmt.executeQuery(); // add "added" record
 		}
@@ -122,7 +123,7 @@ public class Manage {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketID);
 			pstmt.setDate(2,  Date.valueOf(ldate));
-			pstmt.setInt(3,  techID);
+			pstmt.setInt(3,  Technicians.getTechID());
 		}
 		catch (SQLException e) {
 			System.out.println("SQLException occured marking completed.");
