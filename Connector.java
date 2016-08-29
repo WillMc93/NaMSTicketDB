@@ -4,11 +4,11 @@
  * 
  */
 import java.io.Console;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.DriverManager;
+
+import java.sql.*;
 
 import java.util.Scanner;
+
 
 public class Connector {
 
@@ -22,15 +22,16 @@ public class Connector {
 
 	Connector() {
 		Scanner in = new Scanner(System.in);
-		Console console = System.console();
 		
 		// Get Username
 		System.out.print("Username: ");
 		dbUser = in.nextLine();
-		in.close(); // close scanner
-		
+				
 		// Get Password (hidden this way)
-		dbPass = new String(console.readPassword("Password: "));
+		System.out.print("Password: ");
+		dbPass = in.nextLine();
+		
+		in.close(); // close scanner
 			
 		// try to open connection to the database
 		try {
