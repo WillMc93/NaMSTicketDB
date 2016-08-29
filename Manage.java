@@ -24,9 +24,9 @@ public class Manage {
 
 		// forge queries in the furnaces of Vulcan
 		// add new ticket to "tickets"
-		query = "INSERT INTO tickets (Description, RoomNum, Reporter) VALUES (?, ?, ?);";
+		query = "INSERT INTO tickets (Description, RoomNum, Reporter) VALUES (?, ?, ?);"; // ticketID, AddedDate, AddedBy
 		try {		
-			pstmt = ConnectHandler.connection.prepareStatement(query);
+			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setString(1, desc);
 			pstmt.setNull(2, Types.VARCHAR);
 			pstmt.setNull(3, Types.VARCHAR);
@@ -34,17 +34,17 @@ public class Manage {
 			rs = pstmt.executeQuery(); // add ticket and record ResultSet
 		}
 		catch (SQLException e) {
-			System.out.println("Exception occured creating \"tickets\" entry in DB.");
+			System.out.println("Exception occured creating entry in DB.");
 			return false;
 		}
 
-		// add new ticket to "added"
-		query = "INSERT INTO added (TicketID, AddedDate, AddedBy) VALUES (?, ?, ?);"; // make new query for "added"
+		// Try to add new ticket to "added"
+		query = "INSERT INTO added (ticketID, AddedDate, AddedBy) VALUES (?, ?, ?);"; // make new query for "added"
 		try {
-			ticketNum = rs.getInt("TicketID"); // get ticketID
+			ticketNum = rs.getInt("ticketID"); // get ticketID
 			ldate = LocalDate.now(); // get today's date
 
-			pstmt = ConnectHandler.connection.prepareStatement(query);
+			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketNum);
 			pstmt.setDate(2, Date.valueOf(ldate));
 			pstmt.setInt(3, techID);
@@ -52,7 +52,7 @@ public class Manage {
 			pstmt.executeQuery(); // add "added" record
 		}
 		catch (SQLException e) {
-			System.out.println("Exception occured creating \"added\" entry in DB.");
+			System.out.println("Exception occured creating entry in DB.");
 			return false;
 		}
 
@@ -60,7 +60,7 @@ public class Manage {
 	}
 
 	// Method to modify the description of a ticket.
-	public boolean modTicket(int TicketID, String desc) { 
+	public boolean modTicket(int ticketID, String desc) { 
 		// variable declaration
 		LocalDate ldate; // today's date
 		String query; // query container
@@ -70,30 +70,31 @@ public class Manage {
 		String descString;
 
 		// isolate old string value
-		query = "SELECT TicketID FROM tickets WHERE TicketID = ?;";
+		query = "SELECT ticketID FROM tickets WHERE ticketID = ?;";
 		try {
-			pstmt = ConnectHandler.connection.prepareStatement(query);
-			pstmt.setInt(1, TicketID);
-			
+			pstmt = Connector.connection.prepareStatement(query);
+			pstmt.setInt(1, ticketID);
+
 			rs = pstmt.executeQuery();
 		}
 		catch (SQLException e) {
-			System.out.println("Exception occured getting old string from Ticket.");
+			System.out.println("Exception occured getting old string from ticket.");
 			return false;
 		}
 
-		query = "UPDATE tickets SET description = ? WHERE TicketID = ?;";
+		query = "UPDATE tickets SET description = ? WHERE ticketID = ?;";
 		ldate = LocalDate.now(); // get today's date
-
+		
+		// Try to modify description
 		try {
 			// append to old string with today's date and new description
 			descString = rs.getString("Description");
 			descString = "UPDATE: " + ldate.toString() + ": " + desc + "\n" + descString;
 
-			pstmt = ConnectHandler.connection.prepareStatement(query);
+			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setString(1,  descString);
-			pstmt.setInt(2, TicketID);
-			
+			pstmt.setInt(2, ticketID);
+
 			pstmt.executeQuery();
 		}
 		catch (SQLException e) {
@@ -103,4 +104,32 @@ public class Manage {
 
 		return true;
 	}
+
+	public boolean completeTicket(int ticketID, int techID) {
+		// variable declaration
+		LocalDate ldate; // today's date
+		String query; // query container
+		PreparedStatement pstmt;
+		
+		// All we have to do is add an entry to completed
+		query = "INSERT INTO completed VALUES (?, ?, ?);"; // ticketID, CompletedDate, CompletedBy
+		
+		// Get today's date
+		ldate = LocalDate.now();
+		
+		// Try to execute add to completed
+		try {
+			pstmt = Connector.connection.prepareStatement(query);
+			pstmt.setInt(1, ticketID);
+			pstmt.setDate(2,  Date.valueOf(ldate));
+			pstmt.setInt(3,  techID);
+		}
+		catch (SQLException e) {
+			System.out.println("SQLException occured marking completed.");
+			return false;
+		}
+		
+		return true;
+	}
+
 }
