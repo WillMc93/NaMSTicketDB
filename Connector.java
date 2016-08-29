@@ -3,8 +3,6 @@
  * 
  * 
  */
-import java.io.Console;
-
 import java.sql.*;
 
 import java.util.Scanner;
@@ -31,8 +29,6 @@ public class Connector {
 		System.out.print("Password: ");
 		dbPass = in.nextLine();
 		
-		in.close(); // close scanner
-			
 		// try to open connection to the database
 		try {
 			Class.forName(Connector.dbDriver);
