@@ -25,21 +25,10 @@ public class Manage {
 		ResultSet rs; // hold resulting set
 		int ticketNum = -1; // current ticketNumber
 		
-		/*
-		// Clean strings and Transform to char[]
-		if (roomNum.length() > 4) {
-			throw new IllegalArgumentException("Room number too long!");
-		}
-		else if (roomNum.length() <= 4 && roomNum.length() >= 2) {
-			String temp = new String();
-			for (int l = 4 - roomNum.length(); l > 0; l--) { // pad with 0's
-				temp += "0";
+		if (roomNum.length() < 3) { // if roomNum length is less than 3 pad the front with zeros
+			for (int i = 3 - roomNum.length(); i > 0; i--) {
+				roomNum = "0" + roomNum;
 			}
-			temp = temp + roomNum;
-			rN = temp.toCharArray();
-		}
-		else {
-			throw new IllegalArgumentException("Room number too short!");
 		}
 		
 		if (reporter.length() > 20) {
@@ -48,8 +37,6 @@ public class Manage {
 		else if (reporter.length() < 4) {
 			throw new IllegalArgumentException("Reporter Name is too short!");
 		}
-		rep = reporter.toCharArray();
-		*/
 
 		// forge queries in the furnaces of Vulcan
 		// add new ticket to "tickets"
@@ -98,7 +85,7 @@ public class Manage {
 		PreparedStatement pstmt;
 		ResultSet rs; // hold resulting set
 
-		String descString;
+		String descString = null;
 
 		// isolate old string value
 		query = "SELECT ticketID, Description FROM tickets WHERE ticketID = ?;";
@@ -119,7 +106,9 @@ public class Manage {
 		// Try to modify description
 		try {
 			// append to old string with today's date and new description
-			descString = rs.getString("Description");
+			if (rs.next()) {
+				descString = rs.getString("Description");
+			}
 			descString = "UPDATE: " + ldate.toString() + ": " + desc + "\n" + descString;
 
 			pstmt = Connector.connection.prepareStatement(query);
@@ -154,6 +143,8 @@ public class Manage {
 			pstmt.setInt(1, ticketID);
 			pstmt.setDate(2,  Date.valueOf(ldate));
 			pstmt.setInt(3,  Technicians.getTechID());
+			
+			pstmt.executeQuery();
 		}
 		catch (SQLException e) {
 			System.out.println("SQLException occured marking completed.");
