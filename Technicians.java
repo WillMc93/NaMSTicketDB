@@ -8,6 +8,7 @@ import java.sql.SQLException;
 public class Technicians {
 	private static String username;
 	private static int techID;
+	private static boolean admin;
 
 	public boolean login() {
 		// Variable Declaration
@@ -30,12 +31,13 @@ public class Technicians {
 
 		// Try to get techID of current user.
 		try {
-			query = "SELECT TechID FROM technicians WHERE Username = ?;";
+			query = "SELECT TechID, ADMIN FROM technicians WHERE Username = ?;";
 			PreparedStatement pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setString(1,  username);
 			rs = pstmt.executeQuery();
 			if (rs.next()) { // Again, have to advance pointer
 				techID = rs.getInt("TechID");
+				admin = rs.getBoolean("Admin");
 			}
 		}
 		catch(SQLException e) {
@@ -49,4 +51,5 @@ public class Technicians {
 
 	public static String getUsername() { return username; }
 	public static int getTechID() { return techID; }
+	public static boolean isAdmin() { return admin; }
 }
