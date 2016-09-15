@@ -1,5 +1,5 @@
 /*
- * Class for Admin's of the database. Allows the creation and termination of new technicians.
+ * Class for Admin's of the database. Allows the creation and termination of technicians.
  */
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,5 +36,10 @@ public class Admin {
 			return -1;
 		}
 		return -1;
+	}
+	
+	public unemployTech(String username) {
+		// check that user exists
+		System.out.println("Are you sure you want to delete user ")
 	}
 }
