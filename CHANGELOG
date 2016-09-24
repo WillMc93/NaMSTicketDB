@@ -1,0 +1,1 @@
+9/24/16: Changed how account logins work by adding an Account class. This allowed for Technician to become a reference class. Admin now extends Technician allowing for us to reference it as a Technician.
