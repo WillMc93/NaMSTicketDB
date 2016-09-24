@@ -3,25 +3,24 @@ import java.util.Scanner;
 
 public class main {
 	public final static void main(String[] args) {
-		Connector connector = new Connector();
-		Technicians tech = new Technicians();
+		Connector connector = new Connector(); // call this to get logged into the database
+		Account account = new Account(); // call this to get logged into the client, later
+		Technician tech = null; // placeholder
+		Manage manage = null; // placeholder
 
-		Manage manage = null;
-
-		if (tech.login()) {
-			manage = new Manage();
+		if (account.login()) { // if we login successfully
+			tech = account.getTechPtr(); // find out who we are
+			manage = new Manage(); // start new manage connection
 		}
 
-		Scanner in = new Scanner(System.in);
+		//Scanner in = new Scanner(System.in);
 
 		for (int i = 1; i > 0; --i) {
-
-
-			manage.addTicket("TEST", "015A", "Jerome");
-			manage.modTicket(1, "TESTTESTTEST");
-			manage.completeTicket(1);
-
+			if (tech.getClass().equals("Admin")) {
+				((Admin)tech).createTech("Will", true);
+				((Admin)tech).changeEmployment("Will", false);
+			}
 		}
-	}	
+	}
 }
 

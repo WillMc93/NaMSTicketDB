@@ -64,7 +64,7 @@ public class Manage {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketNum);
 			pstmt.setDate(2, Date.valueOf(ldate));
-			pstmt.setInt(3, Technicians.getTechID());
+			pstmt.setInt(3, Technician.getTechID());
 
 			pstmt.executeQuery(); // add "added" record
 		}
@@ -141,7 +141,7 @@ public class Manage {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketID);
 			pstmt.setDate(2,  Date.valueOf(ldate));
-			pstmt.setInt(3,  Technicians.getTechID());
+			pstmt.setInt(3,  Technician.getTechID());
 			
 			pstmt.executeQuery();
 		}
