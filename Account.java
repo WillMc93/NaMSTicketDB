@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Account {
-	private Technician techPtr;
-	
-	public boolean login() {
+	private static Technician techPtr;
+
+	public static boolean login() {
 		// Variable Declaration
 		String query;
 		ResultSet rs;
-		
+
 		String name = null;
 		int techID = -1;
 		boolean admin = false;
@@ -44,7 +44,7 @@ public class Account {
 			System.out.println("Exception occured on login.");
 			return false;
 		}
-		
+
 		// Complete the local login
 		if (admin == true) {
 			techPtr = new Admin(name, techID);
@@ -52,12 +52,12 @@ public class Account {
 		else {
 			techPtr = new Technician(name, techID);
 		}
-		
+
 		// Hark!
 		System.out.println("Login Successful!");
 		return true;
 	}
-	
-	
-	public Technician getTechPtr() { return techPtr; }
+
+
+	public static Technician getTechPtr() { return techPtr; }
 }

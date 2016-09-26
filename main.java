@@ -2,15 +2,23 @@
 
 public class main {
 	public final static void main(String[] args) {
-		Utility util = new Utility(); // start the Utility class
-		Connector connector = new Connector(); // call this to get logged into the database
-		Account account = new Account(); // call this to get logged into the client, later
+		// Initialize Static classes
+		Utility util = new Utility();
+		Connector connector = new Connector();
+		Account account = new Account();
+
+		// Put placeholders in place.
 		Technician tech = null; // placeholder
 		Manage manage = null; // placeholder
 
-		ASCIIint ascii = new ASCIIint();
+		// Login
+		if (Connector.dbLogin() && Account.login()) {
+			tech = Account.getTechPtr();
+		}
 
-		while(ascii.renderMenu()) {}
-		
+		ASCIIint ascii = new ASCIIint(); // call the ASCII interface
+
+		while(ascii.renderMenu()) {} // show ASCII until exit
+
 	}
 }
