@@ -1,9 +1,8 @@
 /*
  * Class for adding, modifying, and completing tickets.
- * 
+ *
  * ToDo: add option for admins to delete tickets
  */
-
 import java.lang.IllegalArgumentException;
 
 import java.sql.Date;
@@ -23,13 +22,13 @@ public class Manage {
 		PreparedStatement pstmt;
 		ResultSet rs; // hold resulting set
 		int ticketNum = -1; // current ticketNumber
-		
+
 		if (roomNum.length() < 3) { // if roomNum length is less than 3 pad the front with zeros
 			for (int i = 3 - roomNum.length(); i > 0; i--) {
 				roomNum = "0" + roomNum;
 			}
 		}
-		
+
 		if (reporter.length() > 20) {
 			throw new IllegalArgumentException("Reporter Name is too long!");
 		}
@@ -40,7 +39,7 @@ public class Manage {
 		// forge queries in the furnaces of Vulcan
 		// add new ticket to "tickets"
 		query = "INSERT INTO tickets (Description, RoomNum, Reporter) VALUES (?, ?, ?) RETURNING TicketID;"; // ticketID, AddedDate, AddedBy
-		try {		
+		try {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setString(1, desc);
 			pstmt.setString(2, roomNum);
@@ -77,7 +76,7 @@ public class Manage {
 	}
 
 	// Method to modify the description of a ticket.
-	public boolean modTicket(int ticketID, String desc) { 
+	public boolean modTicket(int ticketID, String desc) {
 		// variable declaration
 		LocalDate ldate; // today's date
 		String query; // query container
@@ -101,7 +100,7 @@ public class Manage {
 
 		query = "UPDATE tickets SET description = ? WHERE ticketID = ?;";
 		ldate = LocalDate.now(); // get today's date
-		
+
 		// Try to modify description
 		try {
 			// append to old string with today's date and new description
@@ -129,27 +128,27 @@ public class Manage {
 		LocalDate ldate; // today's date
 		String query; // query container
 		PreparedStatement pstmt;
-		
+
 		// All we have to do is add an entry to completed
 		query = "INSERT INTO completed VALUES (?, ?, ?) RETURNING TicketID;"; // ticketID, CompletedDate, CompletedBy
-		
+
 		// Get today's date
 		ldate = LocalDate.now();
-		
+
 		// Try to execute add to completed
 		try {
 			pstmt = Connector.connection.prepareStatement(query);
 			pstmt.setInt(1, ticketID);
 			pstmt.setDate(2,  Date.valueOf(ldate));
 			pstmt.setInt(3,  Technician.getTechID());
-			
+
 			pstmt.executeQuery();
 		}
 		catch (SQLException e) {
 			System.out.println("SQLException occured marking completed.");
 			return false;
 		}
-		
+
 		return true;
 	}
 }
