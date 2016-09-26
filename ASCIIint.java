@@ -1,11 +1,13 @@
 /*
 * ASCIIinterface provides for basic interaction with the database program.
 */
+import IllegalArgumentException;
 
 public class ASCIIint {
-  public ASCIIint () {}
+  private Manage manage;
+  public ASCIIint () { manage = new Manage();}
 
-  public boolean renderMenu() {
+  public boolean renderMenu() throws IllegalArgumentException{
     int choice = 0;
     System.out.println("<********************************>");
     System.out.println("1. View Tickets");
@@ -15,6 +17,34 @@ public class ASCIIint {
 
     choice = Utility.getInt();
 
+    switch (choice) {
+      case 1:
+      return viewTickets();
+      break;
+
+      case 2:
+      return addTicket();
+      break;
+
+      case 3:
+      return completeTicket();
+      break;
+
+      default: throw new IllegalArgumentException;
+    }
+
+    return true;
+  }
+
+  private boolean viewTickets() {
+    return true;
+  }
+
+  private boolean addTicket() {
+    return true;
+  }
+
+  private boolean completeTicket() {
     return true;
   }
 }

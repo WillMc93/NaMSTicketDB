@@ -9,7 +9,7 @@ public class main {
 
 		// Put placeholders in place.
 		Technician tech = null; // placeholder
-		Manage manage = null; // placeholder
+//		Manage manage = null; // placeholder
 
 		// Login
 		if (Connector.dbLogin() && Account.login()) {
@@ -19,6 +19,5 @@ public class main {
 		ASCIIint ascii = new ASCIIint(); // call the ASCII interface
 
 		while(ascii.renderMenu()) {} // show ASCII until exit
-
 	}
 }
